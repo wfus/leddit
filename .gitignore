@@ -1,0 +1,9 @@
+# Mac
+*.DS_Store
+
+# Python
+*__pycache__
+*.pyc
+
+# Don't commit data files
+RC_2019*
