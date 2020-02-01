@@ -1,9 +1,11 @@
 """Simple models for the AITA Dataset."""
-from typing import List, Sequence, Iterable, Tuple, Dict
+from typing import List, Sequence, Iterable, Tuple, Dict, Optional
 import itertools
 import json
 import logging
 import torch
+
+from overrides import overrides
 
 from allennlp.common.checks import ConfigurationError
 from allennlp.common.file_utils import cached_path
@@ -34,8 +36,9 @@ class AITASimpleClassifier(Model):
         text_encoder: Seq2VecEncoder,
         classifier_feedforward: FeedForward,
         initializer: InitializerApplicator = InitializerApplicator(),
-        regularizer: Optional[RegularizerApplicator] = None) -> None:
-
+        regularizer: Optional[RegularizerApplicator] = None
+    ) -> None:
+        super().__init__(vocab)
         self.text_field_embedder = text_field_embedder
         self.text_encoder = text_encoder
         self.classifier_feedforward = classifier_feedforward
@@ -53,19 +56,40 @@ class AITASimpleClassifier(Model):
     
     @overrides
     def forward(self,
-        tokens: Dict[str, torch.LongTensor],
-        label: torch.LongTensor = None) -> Dict[str, torch.Tensor]:
-        pass
+        post: Dict[str, torch.LongTensor],
+        title: Dict[str, torch.LongTensor],
+        label: torch.LongTensor = None,
+    ) -> Dict[str, torch.Tensor]:
+        post_emb = self.text_field_embedder(post)
+        title_emb = self.text_field_embedder(title)
+        mask_post = util.get_text_field_mask(post)
+        mask_title = util.get_text_field_mask(title)
+        enc_post = self.text_encoder(post_emb, mask_post)
+        enc_title = self.text_encoder(title_emb, mask_title)
+
+        logits = self.classifier_feedforward(
+            torch.cat([enc_post, enc_title], dim=1))
+        output_dict = {"logits": logits}
+
+        if label is not None:
+            loss = self.loss(logits, label)
+            for metric in self.metrics.values():
+                metric(logits, label)
+            output_dict["loss"] = loss
+        
+        return output_dict
+
 
     @overrides
-    def decode(self, output_dict: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
-        pass
+    def decode(self, output_dict: Dict[str, torch.Tensor]
+        ) -> Dict[str, torch.Tensor]:
+        """Returns MLE estimate for our classes."""
+        class_probs = F.softmax(output_dict['logits'], dim=-1)
+        output_dict['label'] = class_probs.cpu().numpy().argmax(dim=-1)
+        return output_dict
 
     @overrides
     def get_metrics(self, reset: bool = False) -> Dict[str, float]:
-        pass
-
-
-
-
+        return {metric_name: metric.get_metric(reset)
+                for metric_name, metric in self.metrics.items()}
 
