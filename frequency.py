@@ -2,21 +2,7 @@ import pandas as pd
 import json
 from pathlib import Path
 import argparse
-
-
-def load_dataframe_from_shard(shard_folder):
-    filtered_shards = Path(shard_folder)
-    shards = list(filtered_shards.glob('*'))
-
-    comments = []
-    for shard in shards:
-        with shard.open('r') as f:
-            for line in f:
-                comment = json.loads(line)
-                comments.append(comment)
-
-    df = pd.DataFrame(comments)
-    return df
+from utils import load_dataframe_from_shard
 
 
 if __name__ == '__main__':
