@@ -16,7 +16,7 @@ from allennlp.data.tokenizers import Token
 logger = logging.getLogger(__name__)
 
 
-@DatasetReader.register("aita_simple")
+@DatasetReader.register("aita_simple_reader")
 class AITASimpleDataset(object):
     """Rates posts into three different categories based off of simple majority
     reddit votes. The three categories are:
