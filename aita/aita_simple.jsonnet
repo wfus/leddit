@@ -8,14 +8,14 @@
 
     "iterator": {
         "type": "bucket",
-        "batch_size": 32,
+        "batch_size": 64,
         "sorting_keys": [["title", "num_tokens"]],
     },
 
     "trainer": {
         "num_epochs": 40,
         "patience": 10,
-        "cuda_device": -1,
+        "cuda_device": 0,
         "grad_clipping": 5.0,
         "validation_metric": "+accuracy",
         "optimizer": {
@@ -39,13 +39,13 @@
             "type": 'lstm',
             'bidirectional': 'true',
             'input_size': 100,
-            'hidden_size': 50,
-            'num_layers': 3,
+            'hidden_size': 80,
+            'num_layers': 4,
             "dropout": 0.2,
         },
 
         "classifier_feedforward": {
-            "input_dim": 200,
+            "input_dim": 320,
             "num_layers": 3,
             "hidden_dims": [100, 32, 3],
             "activations": ['relu', 'relu', 'linear'],
