@@ -12,5 +12,5 @@ fi
 echo $DUMP_FILE
 echo $SUBREDDIT
 
-pv $DUMP_FILE  | jq --compact-output "select(.subreddit == \"${SUBREDDIT}\")" \
+pv $DUMP_FILE  | zstdcat | jq --compact-output "select(.subreddit == \"${SUBREDDIT}\")" \
 > ${DUMP_FILE}_${SUBREDDIT}.dump
