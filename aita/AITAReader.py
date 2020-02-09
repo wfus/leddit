@@ -4,13 +4,14 @@ import itertools
 import json
 import logging
 import pandas as pd
+import numpy as np
 
 from overrides import overrides
 
 from allennlp.common.checks import ConfigurationError
 from allennlp.common.file_utils import cached_path
 from allennlp.data.dataset_readers.dataset_reader import DatasetReader
-from allennlp.data.fields import LabelField, TextField
+from allennlp.data.fields import LabelField, TextField, ArrayField
 from allennlp.data.instance import Instance
 from allennlp.data.tokenizers import Tokenizer, WordTokenizer
 from allennlp.data.token_indexers import TokenIndexer, SingleIdTokenIndexer
@@ -56,6 +57,7 @@ class AITASimpleDataset(DatasetReader):
         title_field = TextField(title_tokens, self._token_indexers)
         label_field = LabelField(label)
 
+
         fields = {
             'post': post_field,
             'title': title_field,
@@ -64,8 +66,8 @@ class AITASimpleDataset(DatasetReader):
         return Instance(fields)
 
 
-@DatasetReader.register("aita_bert_simple_reader")
-class AITASimpleOnelineDataset(DatasetReader):
+@DatasetReader.register("aita_bert_fine_grained_reader")
+class AITAFineGrainedOnelineDataset(DatasetReader):
     """Rates posts into three different categories based off of simple majority
     reddit votes. The three categories are:
         NAH: Not an asshole
@@ -101,8 +103,14 @@ class AITASimpleOnelineDataset(DatasetReader):
             fullpost = title + post
         tokens = self._tokenizer.tokenize(fullpost)
 
+        # Calculate probabilites of this row being various labels
+        total = sum(row.label_fine.values())
+        probs = []
+        for key in sorted(row.label_fine):
+            probs.append(row.label_fine[key]/total)
+
         fields = {
             'tokens': TextField(tokens, self._token_indexers),
-            'label': LabelField(row.label),
+            'label': ArrayField(np.array(probs)),
         }
         return Instance(fields)
