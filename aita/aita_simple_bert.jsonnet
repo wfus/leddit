@@ -44,6 +44,6 @@ local learning_rate = 5e-6;
         "type": "bert_for_classification",
         "bert_model": bert_model,
         "dropout": 0.1,
-        "num_labels": 3,
+        "num_labels": 4,
     },
 }
