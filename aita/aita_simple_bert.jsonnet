@@ -35,7 +35,7 @@ local dropout = std.extVar("DROPOUT");
     },
 
     "trainer": {
-        "num_epochs": 5,
+        "num_epochs": 20,
         "cuda_device": 0,
         "validation_metric": "+accuracy",
         "optimizer": {
