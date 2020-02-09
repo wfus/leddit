@@ -1,9 +1,15 @@
+local train_path = "/home/johnkeszler/Documents/leddit/aita/aita-train.pkl";
+local val_path = "/home/johnkeszler/Documents/leddit/aita/aita-dev.pkl";
+
+
 local bert_model = "bert-base-uncased";
-local learning_rate = 5e-6;
+local batch_size = std.extVar("BATCH_SIZE");
+local learning_rate = std.extVar("LEARNING_RATE");
+local dropout = std.extVar("DROPOUT");
 
 {
-    "train_data_path": "aita/aita-train.pkl",
-    "validation_data_path": "aita/aita-dev.pkl",
+    "train_data_path": train_path,
+    "validation_data_path": val_path,
 
     "dataset_reader": {
         "type": "aita_bert_simple_reader",
@@ -24,12 +30,12 @@ local learning_rate = 5e-6;
 
     "iterator": {
         "type": "bucket",
-        "batch_size": 6,
+        "batch_size": batch_size,
         "sorting_keys": [["tokens", "num_tokens"]],
     },
 
     "trainer": {
-        "num_epochs": 120,
+        "num_epochs": 5,
         "cuda_device": 0,
         "validation_metric": "+accuracy",
         "optimizer": {
@@ -43,7 +49,7 @@ local learning_rate = 5e-6;
     "model": {
         "type": "bert_for_classification",
         "bert_model": bert_model,
-        "dropout": 0.1,
+        "dropout": dropout,
         "num_labels": 4,
     },
 }
