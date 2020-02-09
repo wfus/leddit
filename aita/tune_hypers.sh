@@ -1,7 +1,7 @@
 #!/bin/sh
 
 allentune search \
---experiment-name tuning \
+--experiment-name fullpost_tuning \
 --num-gpus 1 \
 --gpus-per-trial 1 \
 --search-space aita/search_space.json \

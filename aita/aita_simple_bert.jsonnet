@@ -14,7 +14,7 @@ local dropout = std.extVar("DROPOUT");
     "dataset_reader": {
         "type": "aita_bert_simple_reader",
         "lazy": false,
-        "only_title": true,
+        "only_title": false,
         "tokenizer": {
             "type": "pretrained_transformer",
             "model_name": bert_model,
@@ -29,13 +29,12 @@ local dropout = std.extVar("DROPOUT");
     },
 
     "iterator": {
-        "type": "bucket",
+        "type": "basic",
         "batch_size": batch_size,
-        "sorting_keys": [["tokens", "num_tokens"]],
     },
 
     "trainer": {
-        "num_epochs": 20,
+        "num_epochs": 5,
         "cuda_device": 0,
         "validation_metric": "+accuracy",
         "optimizer": {

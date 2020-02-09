@@ -64,11 +64,13 @@ class AITASimpleDataset(DatasetReader):
         return Instance(fields)
 
 
+
+
 @DatasetReader.register("aita_bert_simple_reader")
 class AITASimpleOnelineDataset(DatasetReader):
     """Rates posts into three different categories based off of simple majority
     reddit votes. The three categories are:
-        NAH: Not an asshole
+        NAH: noones an asshole here
         YTA: You're the asshole
         ESH: Everyone sucks here
     """
