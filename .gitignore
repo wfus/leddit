@@ -7,5 +7,7 @@
 *.pyc
 
 # Don't commit data files
-RC_2019*
+RC*
 RS*
+
+.ipynb_checkpoints

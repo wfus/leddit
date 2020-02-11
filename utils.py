@@ -9,7 +9,7 @@ def load_dataframe_from_jsonl(fname):
     This won't work for files larger than a few gigabytes, the input needs to
     be filtered from the monthly dumps first."""
     dump_file = Path(fname)
-
+    print(fname)
     comments = []
     with dump_file.open('r') as f:
         for line in tqdm(f):
