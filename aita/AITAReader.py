@@ -16,6 +16,7 @@ from allennlp.data.instance import Instance
 from allennlp.data.tokenizers import Tokenizer, WordTokenizer
 from allennlp.data.token_indexers import TokenIndexer, SingleIdTokenIndexer
 from allennlp.data.tokenizers import Token
+from sklearn.utils import resample
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +58,6 @@ class AITASimpleDataset(DatasetReader):
         title_field = TextField(title_tokens, self._token_indexers)
         label_field = LabelField(label)
 
-
         fields = {
             'post': post_field,
             'title': title_field,
@@ -78,11 +78,19 @@ class AITASimpleOnelineDataset(DatasetReader):
         tokenizer: Tokenizer = None,
         token_indexers: Dict[str, TokenIndexer] = None,
         lazy: bool = False,
+        resample_labels: bool = False,
         only_title: bool = False) -> None:
         super().__init__()
+        """
+        lazy: whether or not we should read line by line rather than read
+            everything in all at once
+        only_title: only train with the titles of the asshole posts
+        resample_labels: resample the labels to equal proportion.
+        """
         self._tokenizer = tokenizer or WordTokenizer()
         self._token_indexers = token_indexers or {'tokens': SingleIdTokenIndexer()}
         self.only_title = only_title
+        self.resample_labels = resample_labels
 
     @overrides
     def _read(self, file_path):
@@ -90,6 +98,27 @@ class AITASimpleOnelineDataset(DatasetReader):
         we cannot load it in lazily, so returns a list."""
         file_path = cached_path(file_path)
         df = pd.read_pickle(file_path)
+        logger.info("Label Initial Counts")
+        logger.info(df.label.value_counts())
+
+        if self.resample_labels:
+            logger.info("Resampling labels, since resample_labels"
+                " was set to true.")
+            labels = list(df.label.unique())
+            label_dataframes = []
+            for label in labels:
+                label_dataframes.append(df[df.label == label])
+            label_counts = [len(x) for x in label_dataframes]
+            largest_label = max(label_counts)
+            df = pd.concat([
+                resample(label_df,
+                    replace=True,
+                    n_samples=largest_label,
+                    random_state=420)
+                for label_df in label_dataframes])
+            logger.info("New label sampling is:")
+            logger.info(df.label.value_counts())
+        
         return list(df.apply(self.row_to_instance, axis=1))
     
     def row_to_instance(self, row):
