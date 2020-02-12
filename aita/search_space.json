@@ -1,7 +1,7 @@
 {
     "LEARNING_RATE": {
         "sampling strategy": "loguniform",
-        "bounds": [5e-6, 1e-4]
+        "bounds": [1e-5, 6e-5]
     },
     
     "BATCH_SIZE": 4,

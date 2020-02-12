@@ -15,6 +15,7 @@ local dropout = std.extVar("DROPOUT");
         "type": "aita_bert_simple_reader",
         "lazy": false,
         "only_title": false,
+        "resample_labels": true,
         "tokenizer": {
             "type": "pretrained_transformer",
             "model_name": bert_model,
