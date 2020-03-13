@@ -6,6 +6,9 @@
 *__pycache__
 *.pyc
 
+# Glove
+*glove.6B*
+
 # Don't commit data files
 RC*
 RS*
