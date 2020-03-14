@@ -1,5 +1,5 @@
-local train_path = "/home/johnkeszler/Documents/leddit/aita/aita-train.pkl";
-local val_path = "/home/johnkeszler/Documents/leddit/aita/aita-dev.pkl";
+local train_path = "/home/johnkeszler/Documents/leddit/aita/aita-small-train.pkl";
+local val_path = "/home/johnkeszler/Documents/leddit/aita/aita-small-dev.pkl";
 
 
 local bert_model = "bert-base-uncased";
