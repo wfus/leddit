@@ -1,6 +1,6 @@
-local train_path = "/home/wfu/harvard/leddit/data/aita-tiny-train.pkl";
-local val_path = "/home/wfu/harvard/leddit/data/aita-tiny-dev.pkl";
-local test_path = "/home/wfu/harvard/leddit/data/aita-tiny-test.pkl";
+local train_path = "/home/wfu/harvard/leddit/data/aita-train.pkl";
+local val_path = "/home/wfu/harvard/leddit/data/aita-dev.pkl";
+local test_path = "/home/wfu/harvard/leddit/data/aita-test.pkl";
 
 local transformer_model = "roberta-base";
 local transformer_dim = 768;
