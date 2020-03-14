@@ -12,7 +12,7 @@ from allennlp.common.file_utils import cached_path
 from allennlp.data.dataset_readers.dataset_reader import DatasetReader
 from allennlp.data.fields import LabelField, TextField
 from allennlp.data.instance import Instance
-from allennlp.data.tokenizers import Tokenizer, WordTokenizer
+from allennlp.data.tokenizers import Tokenizer
 from allennlp.data.token_indexers import TokenIndexer, SingleIdTokenIndexer
 from allennlp.data.tokenizers import Token
 
@@ -80,7 +80,6 @@ class AITASimpleClassifier(Model):
         return output_dict
 
 
-    @overrides
     def decode(self, output_dict: Dict[str, torch.Tensor]
         ) -> Dict[str, torch.Tensor]:
         """Returns MLE estimate for our classes."""

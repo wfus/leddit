@@ -13,7 +13,8 @@ from allennlp.common.file_utils import cached_path
 from allennlp.data.dataset_readers.dataset_reader import DatasetReader
 from allennlp.data.fields import LabelField, TextField, ArrayField
 from allennlp.data.instance import Instance
-from allennlp.data.tokenizers import Tokenizer, WordTokenizer
+from allennlp.data.tokenizers import Tokenizer
+from allennlp.data.tokenizers import PretrainedTransformerTokenizer
 from allennlp.data.token_indexers import TokenIndexer, SingleIdTokenIndexer
 from allennlp.data.tokenizers import Token
 from sklearn.utils import resample
@@ -35,7 +36,7 @@ class AITASimpleDataset(DatasetReader):
         token_indexers: Dict[str, TokenIndexer] = None,
         lazy: bool = False) -> None:
         super().__init__()
-        self._tokenizer = tokenizer or WordTokenizer()
+        self.tokenizer = tokenizer
         self._token_indexers = token_indexers or {'tokens': SingleIdTokenIndexer()}
 
     @overrides
@@ -75,11 +76,11 @@ class AITASimpleOnelineDataset(DatasetReader):
     """
     # The data files are actually as a pickled dataframe.
     def __init__(self,
-        tokenizer: Tokenizer = None,
-        token_indexers: Dict[str, TokenIndexer] = None,
+        tokenizer_name: str = "roberta-base",
+        max_seq_len: int = 512,
         lazy: bool = False,
         resample_labels: bool = False,
-        only_title: bool = False) -> None:
+        only_title: bool = False,) -> None:
         super().__init__()
         """
         lazy: whether or not we should read line by line rather than read
@@ -87,8 +88,9 @@ class AITASimpleOnelineDataset(DatasetReader):
         only_title: only train with the titles of the asshole posts
         resample_labels: resample the labels to equal proportion.
         """
-        self._tokenizer = tokenizer or WordTokenizer()
-        self._token_indexers = token_indexers or {'tokens': SingleIdTokenIndexer()}
+        self.tokenizer = PretrainedTransformerTokenizer(tokenizer_name)
+        self._token_indexers = {'tokens': PretrainedTransformerTokenizer(tokenizer_name)}
+        self.max_seq_len = max_seq_len
         self.only_title = only_title
         self.resample_labels = resample_labels
 
@@ -129,7 +131,7 @@ class AITASimpleOnelineDataset(DatasetReader):
             fullpost = title
         else:
             fullpost = title + post
-        tokens = self._tokenizer.tokenize(fullpost)
+        tokens = self.tokenizer.tokenize(fullpost)
 
         fields = {
             'tokens': TextField(tokens, self._token_indexers),
@@ -152,7 +154,7 @@ class AITAFineGrainedOnelineDataset(DatasetReader):
         lazy: bool = False,
         only_title: bool = False) -> None:
         super().__init__()
-        self._tokenizer = tokenizer or WordTokenizer()
+        self.tokenizer = tokenizer
         self._token_indexers = token_indexers or {'tokens': SingleIdTokenIndexer()}
         self.only_title = only_title
 
@@ -172,7 +174,7 @@ class AITAFineGrainedOnelineDataset(DatasetReader):
             fullpost = title
         else:
             fullpost = title + post
-        tokens = self._tokenizer.tokenize(fullpost)
+        tokens = self.tokenizer.tokenize(fullpost)
 
         # Calculate probabilites of this row being various labels
         total = sum(row.label_fine.values())

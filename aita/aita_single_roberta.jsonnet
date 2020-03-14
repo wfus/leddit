@@ -14,26 +14,11 @@ local dropout = 0.1;
 
     "dataset_reader": {
         "type": "aita_bert_simple_reader",
+        "tokenizer_name": transformer_model,
+        "max_seq_len": 256,
         "lazy": false,
         "only_title": false,
         "resample_labels": true,
-        "tokenizer": {
-            "type": "pretrained_transformer",
-            "model_name": transformer_model,
-            "do_lowercase": true
-        },
-        "token_indexers": {
-            "tokens": {
-                "type": "pretrained_transformer",
-                "model_name": transformer_model,
-                "do_lowercase": true,
-            }
-        }
-    },
-
-    "iterator": {
-        "type": "basic",
-        "batch_size": batch_size,
     },
 
     "trainer": {
@@ -72,9 +57,15 @@ local dropout = 0.1;
         "feedforward": {
             "input_dim": transformer_size,
             "num_layers": 2,
-            "hidden_dims": [transformer_size, 100],
+            "hidden_dims": [transformer_size, 4],
             "activations": "tanh"
         },
         "dropout": dropout,
     },
+    "data_loader": {
+        "batch_sampler": {
+            "type": "bucket",
+            "batch_size": batch_size
+        }
+    }
 }
