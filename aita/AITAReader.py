@@ -88,8 +88,8 @@ class AITASimpleOnelineDataset(DatasetReader):
         only_title: only train with the titles of the asshole posts
         resample_labels: resample the labels to equal proportion.
         """
-        self.tokenizer = PretrainedTransformerTokenizer(tokenizer_name)
-        self._token_indexers = {'tokens': PretrainedTransformerTokenizer(tokenizer_name)}
+        self.tokenizer = PretrainedTransformerTokenizer(tokenizer_name, max_length=max_seq_len)
+        self._token_indexers = {"tokens": SingleIdTokenIndexer()}
         self.max_seq_len = max_seq_len
         self.only_title = only_title
         self.resample_labels = resample_labels
@@ -131,10 +131,9 @@ class AITASimpleOnelineDataset(DatasetReader):
             fullpost = title
         else:
             fullpost = title + post
-        tokens = self.tokenizer.tokenize(fullpost, max_length=self.max_seq_len)
 
         fields = {
-            'tokens': TextField(tokens, self._token_indexers),
+            'tokens': TextField(self.tokenizer.tokenize(fullpost), self._token_indexers),
             'label': LabelField(row.label),
         }
         return Instance(fields)

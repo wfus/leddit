@@ -1,5 +1,5 @@
-local train_path = "/home/johnkeszler/Documents/leddit/aita/aita-train.pkl";
-local val_path = "/home/johnkeszler/Documents/leddit/aita/aita-dev.pkl";
+local train_path = "/home/wfu/harvard/leddit/aita/aita-train.pkl";
+local val_path = "/home/wfu/harvard/leddit/aita/aita-dev.pkl";
 
 
 local transformer_model = "roberta-base";
@@ -34,7 +34,6 @@ local dropout = 0.1;
             "lr": learning_rate,
             "weight_decay": 0.1,
         },
-        "num_serialized_models_to_keep": 1,
         "grad_norm": 1.0,
     },
 
