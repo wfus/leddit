@@ -131,7 +131,7 @@ class AITASimpleOnelineDataset(DatasetReader):
             fullpost = title
         else:
             fullpost = title + post
-        tokens = self.tokenizer.tokenize(fullpost)
+        tokens = self.tokenizer.tokenize(fullpost, max_length=self.max_seq_len)
 
         fields = {
             'tokens': TextField(tokens, self._token_indexers),
