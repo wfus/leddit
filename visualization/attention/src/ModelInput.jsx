@@ -29,11 +29,10 @@ function summarizeExample(example) {
 }
 
 // TODO: You can give a model name and description that show up in your demo.
-const title = "Your Model Name";
+const title = "AITA Model";
 const description = (
   <span>
-  If you want a description of what this demo is showing, you can put that here.  Or just leave this
-  description empty if you don't need it.
+    Transformer based model for the AITA dataset.
   </span>
 );
 
