@@ -6,7 +6,8 @@ local transformer_model = "roberta-base";
 local transformer_dim = 768;
 local cls_is_last_token = false;
 local batch_size = 1;
-local max_seq_length = 128;
+local max_seq_length = 200;
+local epochs = 2;
 
 {
   "dataset_reader":{
@@ -46,8 +47,8 @@ local max_seq_length = 128;
     },
     "feedforward": {
       "input_dim": transformer_dim,
-      "num_layers": 1,
-      "hidden_dims": transformer_dim,
+      "num_layers": 2,
+      "hidden_dims": [transformer_dim, 200],
       "activations": "tanh"
     },
     "dropout": 0.1
@@ -59,7 +60,7 @@ local max_seq_length = 128;
     }
   },
   "trainer": {
-    "num_epochs": 10,
+    "num_epochs": epochs,
     "cuda_device" : 0,
     "validation_metric": "+accuracy",
     "learning_rate_scheduler": {
