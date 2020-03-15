@@ -214,6 +214,7 @@ class AITATestReader(DatasetReader):
         tokenizer: Tokenizer = None,
         token_indexers: Dict[str, TokenIndexer] = None,
         combine_input_fields: bool = None,
+        two_classes: bool = False,
         max_samples: int = -1,
         **kwargs,
     ) -> None:
@@ -221,10 +222,13 @@ class AITATestReader(DatasetReader):
         self._tokenizer = tokenizer or SpacyTokenizer()
         self._token_indexers = token_indexers or {"tokens": SingleIdTokenIndexer()}
         self.max_samples = max_samples
+        self.two_classes = two_classes
         if combine_input_fields is not None:
             self._combine_input_fields = combine_input_fields
         else:
             self._combine_input_fields = isinstance(self._tokenizer, PretrainedTransformerTokenizer)
+
+        self.TWO_CLASSES = ['NTA', 'YTA']
 
     @overrides
     def _read(self, file_path: str):
@@ -233,6 +237,12 @@ class AITATestReader(DatasetReader):
         df = pd.read_pickle(file_path)
         logger.info("Label Initial Counts")
         logger.info(df.label.value_counts())
+
+        # Check if we are only using two classes for training.
+        if self.two_classes:
+            logger.info("Simplifying dataset to only use 2 classes")
+            logger.info("Using classes: %s", self.TWO_CLASSES)
+            df = df[df.label.isin(self.TWO_CLASSES)]
 
         logger.info("Resampling labels, since resample_labels was set to true.")
         labels = list(df.label.unique())
@@ -264,7 +274,7 @@ class AITATestReader(DatasetReader):
         label: str = None,
     ) -> Instance:
 
-        fields: Dict[str, Field] = {}
+        fields = {}
         tokens = self._tokenizer.tokenize_sentence_pair(title, post)
         fields["tokens"] = TextField(tokens, self._token_indexers)
 
