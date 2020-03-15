@@ -250,7 +250,7 @@ class AITATestReader(DatasetReader):
         logger.info("New label sampling is:")
         logger.info(df.label.value_counts())
 
-        if self.max_samples > 0 and self.max_instances < len(df):
+        if self.max_samples > 0 and self.max_samples < len(df):
             df = df.sample(self.max_samples)
 
         for _, row in df.iterrows():
