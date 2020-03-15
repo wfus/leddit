@@ -6,12 +6,15 @@ local transformer_model = "roberta-base";
 local transformer_dim = 768;
 local cls_is_last_token = false;
 local batch_size = 1;
-local max_seq_length = 200;
+local max_seq_length = 150;
 local epochs = 2;
+local dropout = 0.2;
+local lr = 2e-5;
+local max_training_records = 5000;
 
 {
   "dataset_reader":{
-    "type": "aita_test_reader",
+    "type": "aita_transformer_reader",
     "tokenizer": {
       "type": "pretrained_transformer",
       "model_name": transformer_model
@@ -22,7 +25,8 @@ local epochs = 2;
         "model_name": transformer_model,
         "max_length": max_seq_length
       }
-    }
+    },
+    "max_samples": max_training_records
   },
 
   "train_data_path": train_path,
@@ -51,7 +55,7 @@ local epochs = 2;
       "hidden_dims": [transformer_dim, 200],
       "activations": "tanh"
     },
-    "dropout": 0.1
+    "dropout": dropout
   },
   "data_loader": {
     "batch_sampler": {
@@ -69,7 +73,7 @@ local epochs = 2;
     },
     "optimizer": {
       "type": "huggingface_adamw",
-      "lr": 2e-5,
+      "lr": lr,
       "weight_decay": 0.1,
     }
   }
