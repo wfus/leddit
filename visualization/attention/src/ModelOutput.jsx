@@ -11,15 +11,18 @@ class ModelOutput extends React.Component {
     // whatever you want here and visualize it.  We're giving some examples of different return
     // types you might have.  Change names for data types you want, and delete anything you don't
     // need.
-    var string_result_field = outputs['string_result_field'];
+    var label = outputs['label'];
+    var all_labels = outputs['all_labels'];
+    var logits = outputs['logits'];
+    var probs = outputs['probs'];
     // This is a 1D attention array, which we need to make into a 2D matrix to use with our heat
     // map component.
-    var attention_data = outputs['attention_data'].map(x => [x]);
+    // var attention_data = outputs['attention_data'].map(x => [x]);
     // This is a 2D attention matrix.
-    var matrix_attention_data = outputs['matrix_attention_data'];
+    //var matrix_attention_data = outputs['matrix_attention_data'];
     // Labels for our 2D attention matrix, and the rows in our 1D attention array.
-    var column_labels = outputs['column_labels'];
-    var row_labels = outputs['row_labels'];
+    //var column_labels = outputs['column_labels'];
+    //var row_labels = outputs['row_labels'];
 
     // This is how much horizontal space you'll get for the row labels.  Not great to have to
     // specify it like this, or with this name, but that's what we have right now.
@@ -35,12 +38,14 @@ class ModelOutput extends React.Component {
          */}
 
         <div className="form__field">
-          <label>String result field</label>
-          <div className="model__content__summary">{ string_result_field }</div>
+          <label>Label</label>
+          <div className="model__content__summary">{ label }</div>
+          <div className="model__content__summary">{ String(logits.map((x) => x.toFixed(2))) }</div>
+          <div className="model__content__summary">{ String(probs.map((x) => x.toFixed(2)))  }</div>
         </div>
-
+      {/* 
         <div className="form__field">
-          {/* We like using Collapsible to show model internals; you can keep this or change it. */}
+          {}
           <Collapsible trigger="Model internals (beta)">
             <Collapsible trigger="1D attention">
                 <HeatMap xLabels={['Column label']} yLabels={row_labels} data={attention_data} xLabelWidth={xLabelWidth} />
@@ -49,10 +54,19 @@ class ModelOutput extends React.Component {
                 <HeatMap xLabels={column_labels} yLabels={row_labels} data={matrix_attention_data} xLabelWidth={xLabelWidth} />
             </Collapsible>
           </Collapsible>
-        </div>
+        </div> */}
 
+        <div className="form__field">
+            <Collapsible trigger="Model Information">
+              <label>Possible Labels</label>
+              <div>
+                { all_labels.map((x, key) => <div key={key}> {x} </div>) }
+              </div>
+            </Collapsible>
+        </div>
       </div>
     );
+
   }
 }
 

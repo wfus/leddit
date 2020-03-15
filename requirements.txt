@@ -1,2 +1,3 @@
 allennlp==0.9.1.dev20200313  
 praw
+git+http://www.github.com/allenai/allennlp-server

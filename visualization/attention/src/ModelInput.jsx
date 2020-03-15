@@ -28,7 +28,6 @@ function summarizeExample(example) {
   return example.long_text_input.substring(0, 60);
 }
 
-// TODO: You can give a model name and description that show up in your demo.
 const title = "AITA Model";
 const description = (
   <span>
@@ -57,7 +56,7 @@ class ModelInput extends React.Component {
 
     // TODO: You need to map the values in your input boxes to json values that get sent to your
     // predictor.  The keys in this dictionary need to match what your predictor is expecting to receive.
-    runModel({long_text_input: this.long_text_input.value, short_text_input: this.short_text_input.value});
+    runModel({selftext: this.long_text_input.value, title: this.short_text_input.value});
   }
 
   render() {

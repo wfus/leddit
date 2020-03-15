@@ -12,6 +12,8 @@ class AITAClassifier(Predictor):
         label_dict = self._model.vocab.get_index_to_token_vocabulary('labels')
         all_labels = [label_dict[i] for i in range(len(label_dict))]
         output_dict['all_labels'] = all_labels
+        output_dict['title'] = inputs['title']
+        output_dict['selftext'] = inputs['selftext']
         return output_dict
 
     @overrides
