@@ -26,7 +26,6 @@ local max_training_records = 5000;
         "max_length": max_seq_length
       }
     },
-    "max_samples": max_training_records
   },
 
   "train_data_path": train_path,
