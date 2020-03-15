@@ -24,4 +24,3 @@ class AITAClassifier(Predictor):
             title=title,
             post=post
         )
-        
