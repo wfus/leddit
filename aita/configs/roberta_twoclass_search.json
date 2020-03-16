@@ -11,7 +11,7 @@
         "bounds": [0.1, 0.2]
     },
     "MAX_SEQ_LENGTH": {
-        "sampling_strategy": "integer",
+        "sampling strategy": "integer",
         "bounds": [32, 512]
     }
 }
