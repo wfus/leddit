@@ -1,10 +1,20 @@
+local train_path = "/home/johnkeszler/harvard/leddit/data/aita-train.pkl";
+local val_path = "/home/johnkeszler/harvard/leddit/data/aita-dev.pkl";
+local test_path = "/home/johnkeszler/harvard/leddit/data/aita-test.pkl";
+
 local transformer_model = "roberta-base";
 local transformer_dim = 768;
 local cls_is_last_token = false;
+local batch_size = 1;
+local max_seq_length = 150;
+local epochs = 2;
+local dropout = 0.2;
+local lr = 2e-5;
+local max_training_records = 5000;
 
 {
   "dataset_reader":{
-    "type": "snli",
+    "type": "aita_transformer_reader",
     "tokenizer": {
       "type": "pretrained_transformer",
       "model_name": transformer_model
@@ -13,14 +23,14 @@ local cls_is_last_token = false;
       "tokens": {
         "type": "pretrained_transformer",
         "model_name": transformer_model,
-        "max_length": 512
+        "max_length": max_seq_length
       }
-    }
+    },
   },
 
-  "train_data_path": "https://allennlp.s3.amazonaws.com/datasets/snli/snli_1.0_train.jsonl",
-  "validation_data_path": "https://allennlp.s3.amazonaws.com/datasets/snli/snli_1.0_dev.jsonl",
-  "test_data_path": "https://allennlp.s3.amazonaws.com/datasets/snli/snli_1.0_test.jsonl",
+  "train_data_path": train_path,
+  "validation_data_path": val_path,
+  "test_data_path": test_path,
 
   "model": {
     "type": "basic_classifier",
@@ -29,7 +39,7 @@ local cls_is_last_token = false;
         "tokens": {
           "type": "pretrained_transformer",
           "model_name": transformer_model,
-          "max_length": 512
+          "max_length": max_seq_length
         }
       }
     },
@@ -40,20 +50,20 @@ local cls_is_last_token = false;
     },
     "feedforward": {
       "input_dim": transformer_dim,
-      "num_layers": 1,
-      "hidden_dims": transformer_dim,
+      "num_layers": 2,
+      "hidden_dims": [transformer_dim, 200],
       "activations": "tanh"
     },
-    "dropout": 0.1
+    "dropout": dropout
   },
   "data_loader": {
     "batch_sampler": {
       "type": "bucket",
-      "batch_size": 1 
+      "batch_size": batch_size
     }
   },
   "trainer": {
-    "num_epochs": 10,
+    "num_epochs": epochs,
     "cuda_device" : 0,
     "validation_metric": "+accuracy",
     "learning_rate_scheduler": {
@@ -62,7 +72,7 @@ local cls_is_last_token = false;
     },
     "optimizer": {
       "type": "huggingface_adamw",
-      "lr": 2e-5,
+      "lr": lr,
       "weight_decay": 0.1,
     }
   }
