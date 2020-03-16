@@ -5,7 +5,7 @@ local test_path = "/home/johnkeszler/harvard/leddit/data/aita-test.pkl";
 local transformer_model = "roberta-base";
 local transformer_dim = 768;
 local cls_is_last_token = false;
-local epochs = 3;
+local epochs = 5;
 local max_training_records = 5000;
 
 local batch_size = std.extVar("BATCH_SIZE");
@@ -19,7 +19,8 @@ local max_seq_length = std.extVar("MAX_SEQ_LENGTH");
     "type": "aita_transformer_reader",
     "tokenizer": {
       "type": "pretrained_transformer",
-      "model_name": transformer_model
+      "model_name": transformer_model,
+      "max_length": max_seq_length
     },
     "token_indexers": {
       "tokens": {
