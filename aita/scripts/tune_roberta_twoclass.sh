@@ -1,11 +1,11 @@
 #!/bin/sh
 
 allentune search \
---experiment-name fullpost_tuning \
+--experiment-name twoclass_tuning \
 --num-gpus 1 \
 --gpus-per-trial 1 \
---search-space aita/search_space.json \
+--search-space aita/configs/roberta_twoclass_search.json \
+--base-config aita/configs/roberta_twoclass_tune.jsonnet \
 --num-samples 30 \
---base-config aita/aita_simple_roberta.jsonnet \
 --include-package aita.AITAReader \
 --include-package aita.AITASimpleModel

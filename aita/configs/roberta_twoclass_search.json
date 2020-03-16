@@ -1,7 +1,7 @@
 {
     "LEARNING_RATE": {
         "sampling strategy": "loguniform",
-        "bounds": [1e-5, 6e-5]
+        "bounds": [5e-6, 6e-5]
     },
     
     "BATCH_SIZE": 4,
@@ -9,5 +9,9 @@
     "DROPOUT": {
         "sampling strategy": "uniform",
         "bounds": [0.1, 0.2]
+    },
+    "MAX_SEQ_LENGTH": {
+        "sampling_strategy": "integer",
+        "bounds": [32, 512]
     }
 }
