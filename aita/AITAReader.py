@@ -216,6 +216,7 @@ class AITATestReader(DatasetReader):
         combine_input_fields: bool = None,
         two_classes: bool = False,
         max_samples: int = -1,
+        remove_deleted: bool = False,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -223,6 +224,7 @@ class AITATestReader(DatasetReader):
         self._token_indexers = token_indexers or {"tokens": SingleIdTokenIndexer()}
         self.max_samples = max_samples
         self.two_classes = two_classes
+        self.remove_deleted = remove_deleted
         if combine_input_fields is not None:
             self._combine_input_fields = combine_input_fields
         else:
@@ -243,6 +245,16 @@ class AITATestReader(DatasetReader):
             logger.info("Simplifying dataset to only use 2 classes")
             logger.info("Using classes: %s", self.TWO_CLASSES)
             df = df[df.label.isin(self.TWO_CLASSES)]
+
+        # Remove all deleted posts if specified
+        if self.remove_deleted:
+            logger.info("Using classes: %s", self.TWO_CLASSES)
+            df = df[df.selftext.map(lambda x: "[removed]" not in x)]
+            logger.info("New Label Counts without [removed]:")
+            logger.info(df.label.value_counts())
+            df = df[df.selftext.map(lambda x: "[deleted]" not in x)]
+            logger.info("New Label Counts without [deleted]:")
+            logger.info(df.label.value_counts())
 
         logger.info("Resampling labels, since resample_labels was set to true.")
         labels = list(df.label.unique())
