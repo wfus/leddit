@@ -8,10 +8,10 @@ local cls_is_last_token = false;
 local epochs = 5;
 local max_training_records = 5000;
 
-local batch_size = std.extVar("BATCH_SIZE");
-local lr = std.extVar("LEARNING_RATE");
-local dropout = std.extVar("DROPOUT");
-local max_seq_length = std.extVar("MAX_SEQ_LENGTH");
+local batch_size = std.parseInt(std.extVar("BATCH_SIZE"));
+local lr = std.parseJson(std.extVar("LEARNING_RATE"));
+local dropout = std.parseJson(std.extVar("DROPOUT"));
+local max_seq_length = std.parseInt(std.extVar("MAX_SEQ_LENGTH"));
 
 
 {
