@@ -1,0 +1,17 @@
+{
+    "LEARNING_RATE": {
+        "sampling strategy": "loguniform",
+        "bounds": [5e-7, 1e-5]
+    },
+    
+    "BATCH_SIZE": 2,
+    "CUDA_DEVICE": 0,
+    "DROPOUT": {
+        "sampling strategy": "uniform",
+        "bounds": [0.1, 0.15]
+    },
+    "MAX_SEQ_LENGTH": {
+        "sampling strategy": "integer",
+        "bounds": [128, 512]
+    }
+}
