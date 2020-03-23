@@ -1,0 +1,11 @@
+wget -O - https://files.pushshift.io/reddit/comments/RC_2019-03.zst | unzstd  | jq '{"author": .author, "subreddit": .subreddit}' --compact-output >  RC_2019_03.jsonl
+wget -O - https://files.pushshift.io/reddit/comments/RC_2019-04.zst | unzstd  | jq '{"author": .author, "subreddit": .subreddit}' --compact-output >  RC_2019_04.jsonl
+wget -O - https://files.pushshift.io/reddit/comments/RC_2019-05.zst | unzstd  | jq '{"author": .author, "subreddit": .subreddit}' --compact-output >  RC_2019_05.jsonl
+wget -O - https://files.pushshift.io/reddit/comments/RC_2019-06.zst | unzstd  | jq '{"author": .author, "subreddit": .subreddit}' --compact-output >  RC_2019_06.jsonl
+wget -O - https://files.pushshift.io/reddit/comments/RC_2019-07.zst | unzstd  | jq '{"author": .author, "subreddit": .subreddit}' --compact-output >  RC_2019_07.jsonl
+wget -O - https://files.pushshift.io/reddit/comments/RC_2019-08.zst | unzstd  | jq '{"author": .author, "subreddit": .subreddit}' --compact-output >  RC_2019_08.jsonl
+wget -O - https://files.pushshift.io/reddit/comments/RC_2019-09.zst | unzstd  | jq '{"author": .author, "subreddit": .subreddit}' --compact-output >  RC_2019_09.jsonl
+wget -O - https://files.pushshift.io/reddit/comments/RC_2019-01.zst | unzstd  | jq '{"author": .author, "subreddit": .subreddit}' --compact-output >  RC_2019_01.jsonl
+wget -O - https://files.pushshift.io/reddit/comments/RC_2018-12.zst | unzstd  | jq '{"author": .author, "subreddit": .subreddit}' --compact-output >  RC_2018_12.jsonl
+wget -O - https://files.pushshift.io/reddit/comments/RC_2018-11.zst | unzstd  | jq '{"author": .author, "subreddit": .subreddit}' --compact-output >  RC_2018_11.jsonl
+wget -O - https://files.pushshift.io/reddit/comments/RC_2018-10.zst | unzstd  | jq '{"author": .author, "subreddit": .subreddit}' --compact-output >  RC_2018_10.jsonl
