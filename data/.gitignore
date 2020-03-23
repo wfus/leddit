@@ -1,1 +1,4 @@
 *.zst*
+
+# Don't commit the pickle files
+aita-*.pkl
