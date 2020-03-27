@@ -5,14 +5,12 @@ local test_path = "/home/johnkeszler/harvard/leddit/data/aita-test.pkl";
 local transformer_model = "roberta-base";
 local transformer_dim = 768;
 local cls_is_last_token = false;
+local batch_size = 4;
+local max_seq_length = 440;
 local epochs = 5;
+local dropout = 0.1;
+local lr = 1e-5;
 local max_training_records = 5000;
-
-local batch_size = std.parseInt(std.extVar("BATCH_SIZE"));
-local lr = std.parseJson(std.extVar("LEARNING_RATE"));
-local dropout = std.parseJson(std.extVar("DROPOUT"));
-local max_seq_length = std.parseInt(std.extVar("MAX_SEQ_LENGTH"));
-
 
 {
   "dataset_reader":{
@@ -29,8 +27,11 @@ local max_seq_length = std.parseInt(std.extVar("MAX_SEQ_LENGTH"));
         "max_length": max_seq_length
       }
     },
-    "two_classes": true
+	"two_classes": true,
+	"remove_deleted": true,
+  "only_title": true,
   },
+
 
   "train_data_path": train_path,
   "validation_data_path": val_path,
