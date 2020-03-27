@@ -217,14 +217,27 @@ class AITATestReader(DatasetReader):
         two_classes: bool = False,
         max_samples: int = -1,
         remove_deleted: bool = False,
+        only_title: bool = False,
         **kwargs,
     ) -> None:
+        """Dataset readers for using transformer-based downstream classification
+        networks. Tested for BERT and Roberta.
+            tokenizer: Type of tokenizer. Usually 'pretrained-transformer'.
+            token_indexers: Token indexer. Same params at tokenizer usually.
+            combine_input_fields: don't need to regard this.
+            two_classes: Use only YTA or NTA rather than ESH and NAH.
+            max_samples: Limit the number of samples in each epoch by sampling.
+            remove_deleted: should we remove posts with [deleted] or [removed]
+                should be false if we only use the title for predictions
+            only_title: Should we only have the titles for prediction.
+        """
         super().__init__(**kwargs)
         self._tokenizer = tokenizer or SpacyTokenizer()
         self._token_indexers = token_indexers or {"tokens": SingleIdTokenIndexer()}
         self.max_samples = max_samples
         self.two_classes = two_classes
         self.remove_deleted = remove_deleted
+        self.only_title = only_title
         if combine_input_fields is not None:
             self._combine_input_fields = combine_input_fields
         else:
@@ -246,15 +259,20 @@ class AITATestReader(DatasetReader):
             logger.info("Using classes: %s", self.TWO_CLASSES)
             df = df[df.label.isin(self.TWO_CLASSES)]
 
-        # Remove all deleted posts if specified
-        if self.remove_deleted:
-            logger.info("Using classes: %s", self.TWO_CLASSES)
-            df = df[df.selftext.map(lambda x: "[removed]" not in x)]
-            logger.info("New Label Counts without [removed]:")
-            logger.info(df.label.value_counts())
-            df = df[df.selftext.map(lambda x: "[deleted]" not in x)]
-            logger.info("New Label Counts without [deleted]:")
-            logger.info(df.label.value_counts())
+
+        if not self.only_title:
+            # Remove all deleted posts if specified
+            if self.remove_deleted:
+                logger.info("Using classes: %s", self.TWO_CLASSES)
+                df = df[df.selftext.map(lambda x: "[removed]" not in x)]
+                logger.info("New Label Counts without [removed]:")
+                logger.info(df.label.value_counts())
+                df = df[df.selftext.map(lambda x: "[deleted]" not in x)]
+                logger.info("New Label Counts without [deleted]:")
+                logger.info(df.label.value_counts())
+        else:
+            df.selftext = ""
+
 
         logger.info("Resampling labels, since resample_labels was set to true.")
         labels = list(df.label.unique())
