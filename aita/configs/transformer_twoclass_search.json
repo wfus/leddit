@@ -1,7 +1,11 @@
 {
     "LEARNING_RATE": {
         "sampling strategy": "loguniform",
-        "bounds": [5e-6, 6e-5]
+        "bounds": [5e-6, 3e-5]
+    },
+    "TRANSFORMER": {
+        "sampling strategy": "choice",
+        "choices": ["bert-base-uncased", "roberta-base"]
     },
     
     "BATCH_SIZE": 4,
@@ -12,6 +16,6 @@
     },
     "MAX_SEQ_LENGTH": {
         "sampling strategy": "integer",
-        "bounds": [32, 512]
+        "bounds": [512, 512]
     }
 }

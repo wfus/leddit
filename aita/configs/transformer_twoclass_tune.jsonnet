@@ -2,7 +2,7 @@ local train_path = "/home/johnkeszler/harvard/leddit/data/aita-train.pkl";
 local val_path = "/home/johnkeszler/harvard/leddit/data/aita-dev.pkl";
 local test_path = "/home/johnkeszler/harvard/leddit/data/aita-test.pkl";
 
-local transformer_model = "roberta-base";
+local transformer_model = std.extVar("TRANSFORMER");
 local transformer_dim = 768;
 local cls_is_last_token = false;
 local epochs = 5;
