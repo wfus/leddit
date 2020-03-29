@@ -107,6 +107,16 @@ class AITALSTMBaseline(Model):
         self.text_encoder = text_encoder
         self.classifier_feedforward = classifier_feedforward
 
+        if text_field_embedder.get_output_dim() != text_encoder.get_input_dim():
+            raise ConfigurationError("Dimension mismatch between text field"
+                " embedder and text encoder.")
+        
+        self.metrics = {
+            "accuracy": CategoricalAccuracy()
+        }
+
+        self.loss = torch.nn.CrossEntropyLoss()
+        initializer(self)
 
     @overrides
     def forward(self,
