@@ -143,5 +143,3 @@ class AITALSTMBaseline(Model):
     def get_metrics(self, reset: bool = False) -> Dict[str, float]:
         return {metric_name: metric.get_metric(reset)
                 for metric_name, metric in self.metrics.items()}
-
-
